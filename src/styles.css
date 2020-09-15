@@ -1,0 +1,55 @@
+.App {
+  font-family: sans helvetica sans-serif;
+  text-align: center;
+}
+.status-board {
+  padding: 4em;
+  border: 1px solid black;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+
+  float: left;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 3em;
+  height: 3em;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding-left: 1em;
+  padding-right: 2em;
+  padding-top: 0em;
+  padding-bottom: 1em;
+  text-align: center;
+  width: 3em;
+}
+
+.square.marked {
+  background: lightgreen;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.ticket {
+  display: inline-block;
+}
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.drawnnumber {
+  display: inline-block;
+  color: darkviolet;
+  border-radius: 8em;
+  background: #ffffb3;
+  border: 1px solid #cce6ff;
+  font-size: 4em;
+  text-align: center;
+  width: 20%;
+}
