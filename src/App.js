@@ -1,5 +1,5 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
+// import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import StatusLayout from "./containers/StatusLayout";
 import TicketLayout from "./containers/TicketLayout";
