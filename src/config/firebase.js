@@ -23,4 +23,4 @@ if (firebase.messaging.isSupported()) {
 	);
 }
 
-export { messaging };
+export { firebase, messaging };
