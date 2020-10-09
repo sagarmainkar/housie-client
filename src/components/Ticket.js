@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ClaimPrize from "./ClaimPrize";
 import Row from "./Row";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
