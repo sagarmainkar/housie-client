@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Ticket = ({ numbers, ticketId }) => {
-	const gameId = "gjGLugGl8ZoQP9EdooNb";
+const Ticket = ({ numbers, gameId }) => {
 	const [game, loading, error] = useDocumentData(
 		firebase.firestore().doc(`games/${gameId}`),
 		{
@@ -169,7 +168,7 @@ const Ticket = ({ numbers, ticketId }) => {
 	return (
 		<>
 			<div className="ticket">
-				<h2>Ticket Number: {ticketId}</h2>
+				<br />
 				<Row numbers={firstRow} key="row1" onRowChange={onChange} />
 
 				<Row numbers={secondRow} key="row2" onRowChange={onChange} />

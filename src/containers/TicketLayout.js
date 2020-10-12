@@ -1,12 +1,8 @@
 import React from "react";
 import Ticket from "../components/Ticket";
 
-const TicketLayout = ({ numbers }) => (
-	<>
-		<Ticket numbers={numbers[0]} />
-		{/* <hr />
-    <Ticket numbers={numbers[1]} /> */}
-	</>
+const TicketLayout = ({ numbers, gameId }) => (
+	<Ticket numbers={numbers} gameId={gameId} />
 );
 
 export default TicketLayout;
