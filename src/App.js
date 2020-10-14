@@ -83,8 +83,13 @@ export default function App() {
 			{user && ticket && gameId !== "" ? (
 				<>
 					<SignOut />
-					<StatusLayout />
-					<TicketLayout numbers={ticket.numbers} gameId={gameId} />
+					<StatusLayout user={user} firebase={firebase} gameId={gameId} />
+					<TicketLayout
+						user={user}
+						firebase={firebase}
+						numbers={ticket.numbers}
+						gameId={gameId}
+					/>
 				</>
 			) : (
 				<SignIn />

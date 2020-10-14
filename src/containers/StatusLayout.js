@@ -7,13 +7,13 @@ const winners = [
 	{ prize: "Corners", name: "Mary" },
 	{ prize: "Second Row", name: "Mary" },
 ];
-const StatusLayout = ({ number }) => (
+const StatusLayout = ({ user, firebase, gameId }) => (
 	<>
 		<div id="status-board">
 			<div className="status-board">
-				<WinnerStatus winners={winners} />
+				<WinnerStatus firebase={firebase} user={user} gameId={gameId} />
 			</div>
-			<DrawnNumber number={number} />
+			<DrawnNumber />
 		</div>
 	</>
 );

@@ -4,8 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
-import { firebase } from "../config/firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import "firebase/firestore";
 
 const useStyles = makeStyles((theme) => ({
 	margin: {
@@ -25,16 +25,22 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Ticket = ({ numbers, gameId }) => {
+const Ticket = ({ user, firebase, numbers, gameId }) => {
+	// const firestore = firebase.firestore();
 	const [game, loading, error] = useDocumentData(
 		firebase.firestore().doc(`games/${gameId}`),
 		{
-			snapshotListenOptions: { includeMetadataChanges: true },
+			snapshotListenOptions: { includeMetadataChanges: false },
 		}
 	);
 
 	const drawnNumbers = game ? game.drawnNumbers : [];
-	const [fullHouse, setFullHouse] = useState(false);
+	const firstRowWin = game ? game.firstRow : {};
+	const secondRowWin = game ? game.secondRow : {};
+	const thirdRowWin = game ? game.thirdRow : {};
+	const fullHouseWin = game ? game.fullHouse : {};
+
+	const [FH, setFH] = useState(false);
 	const [FR, setFR] = useState(false);
 	const [SR, setSR] = useState(false);
 	const [TR, setTR] = useState(false);
@@ -90,7 +96,7 @@ const Ticket = ({ numbers, gameId }) => {
 			setThirdRowMap(thirdRowMap.set(num, marked));
 		}
 		// console.log(checkAllMarked());
-		setFullHouse(isFullHouse());
+		setFH(isFH());
 
 		let [fr, sr, tr] = isRowComplete();
 		// console.log(fr, sr, tr);
@@ -100,14 +106,31 @@ const Ticket = ({ numbers, gameId }) => {
 		setTR(tr);
 	};
 
-	const isFullHouse = () => {
-		let fullHouse = true;
+	const isFH = () => {
+		let fh = true;
 		markedMap.forEach(function (marked, num) {
 			// if (!marked) console.log(`Num: ${num} Marked :${marked}`);
-			if (!marked) fullHouse = false;
+			if (!marked) fh = false;
 		});
+		if (fh && !includesAll(drawnNumbers, Array.from(markedMap.keys())))
+			fh = false;
+		return fh;
+	};
 
-		return fullHouse;
+	const includesAll = (larger, smaller) => {
+		let includes = true;
+		const BreakException = {};
+		try {
+			smaller.forEach((num) => {
+				if (!larger.includes(num)) {
+					throw BreakException;
+				}
+			});
+		} catch (e) {
+			includes = false;
+		}
+
+		return includes;
 	};
 
 	const isRowComplete = () => {
@@ -119,13 +142,33 @@ const Ticket = ({ numbers, gameId }) => {
 			if (!marked) frComplete = false;
 		});
 
+		if (
+			(frComplete &&
+				!includesAll(drawnNumbers, Array.from(firstRowMap.keys()))) ||
+			firstRowWin !== undefined
+		)
+			frComplete = false;
+
 		secondRowMap.forEach(function (marked, num) {
 			if (!marked) srComplete = false;
 		});
 
+		if (
+			(srComplete &&
+				!includesAll(drawnNumbers, Array.from(secondRowMap.keys()))) ||
+			secondRowWin !== undefined
+		)
+			srComplete = false;
+
 		thirdRowMap.forEach(function (marked, num) {
 			if (!marked) trComplete = false;
 		});
+		if (
+			(trComplete &&
+				!includesAll(drawnNumbers, Array.from(thirdRowMap.keys()))) ||
+			thirdRowWin !== undefined
+		)
+			trComplete = false;
 
 		return [frComplete, srComplete, trComplete];
 	};
@@ -135,24 +178,90 @@ const Ticket = ({ numbers, gameId }) => {
 
 		switch (type) {
 			case 1:
-				drawnNumbers.forEach((num) =>
-					firstRowMap.has(num) ? "" : (allIncluded = false)
-				);
+				Array.from(firstRowMap.keys()).forEach((num) => {
+					if (!drawnNumbers.includes(num)) allIncluded = false;
+				});
+				if (allIncluded) {
+					firebase
+						.firestore()
+						.collection("games")
+						.doc(gameId)
+						.set(
+							{
+								firstRow: {
+									id: user.uid,
+									name: user.displayName,
+									email: user.email,
+								},
+							},
+							{ merge: true }
+						);
+				}
 				break;
 			case 2:
-				drawnNumbers.forEach((num) =>
-					secondRowMap.has(num) ? "" : (allIncluded = false)
-				);
+				Array.from(secondRowMap.keys()).forEach((num) => {
+					if (!drawnNumbers.includes(num)) allIncluded = false;
+				});
+				if (allIncluded) {
+					firebase
+						.firestore()
+						.collection("games")
+						.doc(gameId)
+						.set(
+							{
+								secondRow: {
+									id: user.uid,
+									name: user.displayName,
+									email: user.email,
+								},
+							},
+							{ merge: true }
+						);
+				}
 				break;
 			case 3:
-				drawnNumbers.forEach((num) =>
-					thirdRowMap.has(num) ? "" : (allIncluded = false)
-				);
+				Array.from(thirdRowMap.keys()).forEach((num) => {
+					if (!drawnNumbers.includes(num)) allIncluded = false;
+				});
+
+				if (allIncluded) {
+					firebase
+						.firestore()
+						.collection("games")
+						.doc(gameId)
+						.set(
+							{
+								thirdRow: {
+									id: user.uid,
+									name: user.displayName,
+									email: user.email,
+								},
+							},
+							{ merge: true }
+						);
+				}
 				break;
 			case 4:
-				drawnNumbers.forEach((num) =>
-					markedMap.has(num) ? "" : (allIncluded = false)
-				);
+				Array.from(markedMap.keys()).forEach((num) => {
+					if (!drawnNumbers.includes(num)) allIncluded = false;
+				});
+
+				if (allIncluded) {
+					firebase
+						.firestore()
+						.collection("games")
+						.doc(gameId)
+						.set(
+							{
+								fullHouse: {
+									id: user.uid,
+									name: user.displayName,
+									email: user.email,
+								},
+							},
+							{ merge: true }
+						);
+				}
 				break;
 			default:
 				allIncluded = false;
@@ -169,10 +278,28 @@ const Ticket = ({ numbers, gameId }) => {
 		<>
 			<div className="ticket">
 				<br />
-				<Row numbers={firstRow} key="row1" onRowChange={onChange} />
+				<Row
+					firebase={firebase}
+					gameid={gameId}
+					numbers={firstRow}
+					key="row1"
+					onRowChange={onChange}
+				/>
 
-				<Row numbers={secondRow} key="row2" onRowChange={onChange} />
-				<Row numbers={thirdRow} key="row3" onRowChange={onChange} />
+				<Row
+					firebase={firebase}
+					gameid={gameId}
+					numbers={secondRow}
+					key="row2"
+					onRowChange={onChange}
+				/>
+				<Row
+					firebase={firebase}
+					gameid={gameId}
+					numbers={thirdRow}
+					key="row3"
+					onRowChange={onChange}
+				/>
 			</div>
 			<div className={classes.root}>
 				<ButtonGroup size="small" aria-label="small outlined button group">
@@ -203,7 +330,7 @@ const Ticket = ({ numbers, gameId }) => {
 					<Button
 						variant="contained"
 						color="primary"
-						disabled={!fullHouse}
+						disabled={!FH}
 						onClick={(e) => claimPrize(4)}
 					>
 						FH
