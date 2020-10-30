@@ -3,14 +3,17 @@ import React from "react";
 import { withFirebase } from "../Firebase";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/actions/user";
+import MyButton from "../MyButton";
+
+import SignOutIcon from "@material-ui/icons/ExitToApp";
 
 const SignOutButton = ({ firebase }) => {
   const dispatch = useDispatch();
 
   return (
-    <button type="button" onClick={(e) => dispatch(logout(firebase))}>
-      Sign Out
-    </button>
+    <MyButton tip="Signout" onClick={(e) => dispatch(logout(firebase))}>
+      <SignOutIcon color="primary" />
+    </MyButton>
   );
 };
 

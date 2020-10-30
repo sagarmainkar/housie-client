@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import Navigation from "../Navigation";
+import Navigation, { AuthRoute } from "../Navigation";
 import LandingPage from "../Landing";
 import SignUpPage from "../SignUp";
 import SignInPage from "../SignIn";
@@ -14,7 +14,7 @@ import { withFirebase } from "../Firebase";
 import { useSelector, useDispatch } from "react-redux";
 
 import * as ROUTES from "../../constants/routes";
-import { SET_AUTH_USER } from "../../constants/actions";
+import { SET_AUTH_USER, CLEAR_SESSION } from "../../constants/actions";
 
 const App = (props) => {
   // const [authUser, setAuthUser] = useState(null);
@@ -36,14 +36,20 @@ const App = (props) => {
     <Router>
       <Navigation authUser={authUser} />
       <hr />
+      <div className="container">
+        <Switch>
+          <Route exact path={ROUTES.HOME} component={withFirebase(HomePage)} />
+          <AuthRoute exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+          <AuthRoute exact path={ROUTES.SIGN_IN} component={SignInPage} />
+          <AuthRoute
+            exact
+            path={ROUTES.PASSWORD_FORGET}
+            component={PasswordForgetPage}
+          />
 
-      <Route exact path={ROUTES.LANDING} component={LandingPage} />
-      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-      <Route path={ROUTES.HOME} component={HomePage} />
-      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-      {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
+          <AuthRoute exact path={ROUTES.ACCOUNT} component={AccountPage} />
+        </Switch>
+      </div>
     </Router>
   );
 };

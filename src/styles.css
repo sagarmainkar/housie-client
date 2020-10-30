@@ -1,56 +1,76 @@
-.App {
-	font-family: sans helvetica sans-serif;
-	text-align: center;
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: rgb(245, 245, 245);
 }
+
+.container {
+  margin: 80px auto 0 auto;
+  max-width: 1200px;
+}
+
+.nav-container {
+  margin: auto;
+}
+
+.nav-container svg {
+  color: #fff;
+}
+a {
+  text-decoration: none;
+}
+
 .status-board {
-	padding: 1rem;
-	/* border: 1px solid #333333; */
+  padding: 1rem;
+  /* border: 1px solid #333333; */
 }
 
 .square {
-	background: #fff;
-	border: 1px solid #999;
+  background: #fff;
+  border: 1px solid #999;
 
-	float: left;
-	font-size: 1rem;
-	font-weight: bold;
-	line-height: 3rem;
-	height: 3rem;
-	margin-right: -1px;
-	margin-top: -1px;
-	padding-left: 1rem;
-	padding-right: 2rem;
-	padding-top: 0;
-	padding-bottom: 1rem;
-	text-align: center;
-	width: 3rem;
+  float: left;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 3rem;
+  height: 3rem;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding-left: 1rem;
+  padding-right: 2rem;
+  padding-top: 0;
+  padding-bottom: 1rem;
+  text-align: center;
+  width: 3rem;
 }
 
 .square.marked {
-	background: lightgreen;
+  background: lightgreen;
 }
 
 .square:focus {
-	outline: none;
+  outline: none;
 }
 
 .ticket {
-	display: inline-block;
+  display: inline-block;
 }
 .board-row:after {
-	clear: both;
-	content: "";
-	display: table;
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .drawnnumber {
-	display: inline-block;
-	color: darkviolet;
-	border-radius: 8rem;
-	background: #ffffb3;
-	border: 1px solid #cce6ff;
-	font-size: 3rem;
-	text-align: center;
-	width: 30%;
-	margin-top: 1rem;
+  display: inline-block;
+  color: darkviolet;
+  border-radius: 8rem;
+  background: #ffffb3;
+  border: 1px solid #cce6ff;
+  font-size: 3rem;
+  text-align: center;
+  width: 30%;
+  margin-top: 1rem;
 }
