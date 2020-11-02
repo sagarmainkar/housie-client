@@ -11,7 +11,7 @@ const Ticket = ({ numbers, ticketId }) => {
 
   return (
     <div className="ticket">
-      <h2>Ticket Number: {ticketId}</h2>
+      {/* <h2>Ticket Number: {ticketId}</h2> */}
       <Row numbers={firstRow} key="row1" />
       <Row numbers={secondRow} key="row2" />
       <Row numbers={thirdRow} key="row3" />
